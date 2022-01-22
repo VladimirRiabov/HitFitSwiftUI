@@ -15,7 +15,6 @@ struct ContentView: View {
                 ExerciseView(index: index)
             }
         }
-        .tabViewStyle(PageTabViewStyle())
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         
     }
