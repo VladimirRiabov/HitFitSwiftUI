@@ -17,6 +17,7 @@
 		A40DD5C3279C41B00008CD1C /* squat.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = A40DD5BF279C41B00008CD1C /* squat.mp4 */; };
 		A40DD5C4279C41B00008CD1C /* sun-salute.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = A40DD5C0279C41B00008CD1C /* sun-salute.mp4 */; };
 		A40DD5C5279C41B00008CD1C /* step-up.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = A40DD5C1279C41B00008CD1C /* step-up.mp4 */; };
+		A40DD5C7279C4BAC0008CD1C /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40DD5C6279C4BAC0008CD1C /* HeaderView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		A40DD5BF279C41B00008CD1C /* squat.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = squat.mp4; sourceTree = "<group>"; };
 		A40DD5C0279C41B00008CD1C /* sun-salute.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "sun-salute.mp4"; sourceTree = "<group>"; };
 		A40DD5C1279C41B00008CD1C /* step-up.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "step-up.mp4"; sourceTree = "<group>"; };
+		A40DD5C6279C4BAC0008CD1C /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +88,7 @@
 				A40DD5AA279C299C0008CD1C /* ContentView.swift */,
 				A40DD5B6279C35FA0008CD1C /* WelcomeView.swift */,
 				A40DD5B8279C36060008CD1C /* ExerciseView.swift */,
+				A40DD5C6279C4BAC0008CD1C /* HeaderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -175,6 +178,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A40DD5C7279C4BAC0008CD1C /* HeaderView.swift in Sources */,
 				A40DD5B9279C36060008CD1C /* ExerciseView.swift in Sources */,
 				A40DD5AB279C299C0008CD1C /* ContentView.swift in Sources */,
 				A40DD5B7279C35FA0008CD1C /* WelcomeView.swift in Sources */,
