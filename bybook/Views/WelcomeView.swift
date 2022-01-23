@@ -31,7 +31,7 @@ struct WelcomeView: View {
                 .padding()
             }
             VStack {
-                HeaderView(titleText: NSLocalizedString("Welcome", comment: "greeting"))
+                HeaderView(selectedTab: $selectedTab, titleText: "Welcome")
                 Spacer()
                 Button(NSLocalizedString("History", comment: "view user activity")) { }
                 .padding(.bottom)
