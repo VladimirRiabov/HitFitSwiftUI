@@ -11,8 +11,12 @@ import AVKit
 struct ExerciseView: View {
     let videoNames = ["squat", "step-up", "burpee", "sun-salute"]
     let exerciseNames = ["Squat", "Step Up", "Burpee", "Sun Salute"]
+    @Binding var selectedTab: Int
     let index: Int
     let interval: TimeInterval = 30
+    var lastExercise: Bool {
+     index + 1 == Exercise.exercises.count
+   }
     var body: some View {
         GeometryReader { geometry in
             VStack {
@@ -30,9 +34,12 @@ struct ExerciseView: View {
                 }
                 Text(Date().addingTimeInterval(interval), style: .timer)
                     .font(.system(size: 90))
-                Button( NSLocalizedString(
-                    "Start/Done",
-                    comment: "begin exercise / mark as finished")) { }
+                HStack(spacing: 150) {
+                  Button("Start Exercise") { }
+                    Button("Done") {
+                     selectedTab = lastExercise ? 9 : selectedTab + 1
+                   }
+                }
                 .font(.title3)
                 .padding()
                 RatingView()
@@ -47,7 +54,7 @@ struct ExerciseView: View {
 
 struct ExerciseView_Previews: PreviewProvider {
     static var previews: some View {
-        ExerciseView(index: 0)
+        ExerciseView(selectedTab: .constant(1), index: 1)
     }
 }
 
