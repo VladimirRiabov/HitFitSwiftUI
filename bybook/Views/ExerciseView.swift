@@ -16,10 +16,11 @@ struct ExerciseView: View {
     var lastExercise: Bool {
         index + 1 == Exercise.exercises.count
     }
-    @State private var rating = 0
+    @AppStorage("rating") private var rating = 0
     @State private var showHistory = false
     @State private var showSuccess = false
     @EnvironmentObject var history: HistoryStore
+    
     var body: some View {
         GeometryReader { geometry in
             VStack {
