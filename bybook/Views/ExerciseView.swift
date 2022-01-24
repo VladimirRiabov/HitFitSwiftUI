@@ -13,11 +13,14 @@ struct ExerciseView: View {
     let exerciseNames = ["Squat", "Step Up", "Burpee", "Sun Salute"]
     @Binding var selectedTab: Int
     let index: Int
-    let interval: TimeInterval = 30
+    @State private var timerDone = false
+    @State private var showTimer = false
     var lastExercise: Bool {
         index + 1 == Exercise.exercises.count
     }
     @State private var rating = 0
+    @State private var showHistory = false
+    @State private var showSuccess = false
     var body: some View {
         GeometryReader { geometry in
             VStack {
@@ -35,20 +38,40 @@ struct ExerciseView: View {
                     Text("Couldn’t find \(Exercise.exercises[index].videoName).mp4")
                         .foregroundColor(.red)
                 }
-                Text(Date().addingTimeInterval(interval), style: .timer)
-                    .font(.system(size: 90))
+                //                Text(Date().addingTimeInterval(interval), style: .timer)
+                //                 .font(.system(size: 90))
                 HStack(spacing: 150) {
-                    Button("Start Exercise") { }
+                    Button("Start Exercise") { // Move buttons above TimerView
+                        showTimer.toggle()
+                    }
                     Button("Done") {
-                        selectedTab = lastExercise ? 9 : selectedTab + 1
+                        timerDone = false
+                        showTimer.toggle()
+                        if lastExercise {
+                            showSuccess.toggle()
+                        } else {
+                            selectedTab += 1
+                        }
+                    }
+                    .disabled(!timerDone)
+                    .sheet(isPresented: $showSuccess) {
+                        SuccessView(selectedTab: $selectedTab)
                     }
                 }
                 .font(.title3)
                 .padding()
-                RatingView(rating: $rating)
-                    .padding()
+                if showTimer {
+                    TimerView(timerDone: $timerDone)
+                }
                 Spacer()
-                Button("History") { }
+                RatingView(rating: $rating) // Move RatingView below Spacer
+                    .padding()
+                Button("History") {
+                    showHistory.toggle()
+                }
+                .sheet(isPresented: $showHistory) {
+                    HistoryView(showHistory: $showHistory)
+                }
                 .padding(.bottom)
             }
         }
@@ -57,7 +80,7 @@ struct ExerciseView: View {
 
 struct ExerciseView_Previews: PreviewProvider {
     static var previews: some View {
-        ExerciseView(selectedTab: .constant(1), index: 1)
+        ExerciseView(selectedTab: .constant(3), index: 3)
     }
 }
 

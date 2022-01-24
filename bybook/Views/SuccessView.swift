@@ -13,6 +13,8 @@ struct SuccessView: View {
   Remember tomorrow's another day.
   So eat well and get some rest.
 """
+    @Environment(\.presentationMode) var presentationMode
+    @Binding var selectedTab: Int
     var body: some View {
         ZStack {
             VStack {
@@ -30,7 +32,10 @@ struct SuccessView: View {
             }
             VStack {
                 Spacer()
-                Button("History") { }
+                Button("Continue") {
+                 presentationMode.wrappedValue.dismiss()
+                    selectedTab = 9
+               }
                 .padding(.bottom)
             }
         }
@@ -39,6 +44,6 @@ struct SuccessView: View {
 
 struct SuccessView_Previews: PreviewProvider {
     static var previews: some View {
-        SuccessView()
+        SuccessView(selectedTab: .constant(3))
     }
 }
