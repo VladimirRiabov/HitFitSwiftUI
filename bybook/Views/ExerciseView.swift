@@ -9,8 +9,6 @@ import SwiftUI
 import AVKit
 
 struct ExerciseView: View {
-    let videoNames = ["squat", "step-up", "burpee", "sun-salute"]
-    let exerciseNames = ["Squat", "Step Up", "Burpee", "Sun Salute"]
     @Binding var selectedTab: Int
     let index: Int
     @State private var timerDone = false
@@ -21,6 +19,7 @@ struct ExerciseView: View {
     @State private var rating = 0
     @State private var showHistory = false
     @State private var showSuccess = false
+    @EnvironmentObject var history: HistoryStore
     var body: some View {
         GeometryReader { geometry in
             VStack {
@@ -45,6 +44,7 @@ struct ExerciseView: View {
                         showTimer.toggle()
                     }
                     Button("Done") {
+                        history.addDoneExercise(Exercise.exercises[index].exerciseName)
                         timerDone = false
                         showTimer.toggle()
                         if lastExercise {
@@ -80,7 +80,8 @@ struct ExerciseView: View {
 
 struct ExerciseView_Previews: PreviewProvider {
     static var previews: some View {
-        ExerciseView(selectedTab: .constant(3), index: 3)
+        ExerciseView(selectedTab: .constant(0), index: 0)
+         .environmentObject(HistoryStore())
     }
 }
 
