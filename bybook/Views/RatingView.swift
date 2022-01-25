@@ -28,6 +28,15 @@ struct RatingView: View {
           startingAt: 0)
     } }
     
+    fileprivate func convertRating() {
+        // 2 смещение на число exercise index относительно start index
+        let index = ratings.index(ratings.startIndex, offsetBy: exerciseIndex)
+        // 3
+        let character = ratings[index]
+        // 4
+        rating = character.wholeNumberValue ?? 0
+    }
+    
     var body: some View {
         HStack {
             ForEach(0 ..< maximumRating + 1) { index in
@@ -38,13 +47,11 @@ struct RatingView: View {
                         updateRating(index: index)
                     }
                     .onAppear {
-                    // 2 смещение на число exercise index относительно start index
-                      let index = ratings.index(ratings.startIndex, offsetBy: exerciseIndex)
-                    // 3
-                      let character = ratings[index]
-                      // 4
-                      rating = character.wholeNumberValue ?? 0
+                        convertRating()
                     }
+                    .onChange(of: ratings) { _ in
+                     convertRating()
+                   }
             }
         }
         .font(.largeTitle)
