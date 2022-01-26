@@ -28,6 +28,7 @@ struct bybookApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                
                 .environmentObject(historyStore)
                 .onAppear {
                   print(FileManager.default.urls(

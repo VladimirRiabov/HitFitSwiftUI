@@ -25,10 +25,10 @@ struct WelcomeView: View {
                         .clipShape(Circle())
                 }
                 Button(action: { selectedTab = 0 }) {
-                  Text(NSLocalizedString("Get Started", comment: "invitation"))
-                  Image(systemName: "arrow.right.circle")
+                  Text("Get Started")
+                    .raisedButtonTextStyle()
                 }
-                .font(.title2)
+                .buttonStyle(RaisedButtonStyle())
                 .padding()
             }
             VStack {

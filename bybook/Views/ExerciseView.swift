@@ -21,7 +21,14 @@ struct ExerciseView: View {
     @State private var showSuccess = false
     @EnvironmentObject var history: HistoryStore
     
+    var startExerciseButton: some View {
+      RaisedButton(buttonText: "Start Exercise") {
+        showTimer.toggle()
+      }
+    }
+    
     var body: some View {
+        
         GeometryReader { geometry in
             VStack {
                 HeaderView(
@@ -41,9 +48,9 @@ struct ExerciseView: View {
                 //                Text(Date().addingTimeInterval(interval), style: .timer)
                 //                 .font(.system(size: 90))
                 HStack(spacing: 150) {
-                    Button("Start Exercise") { // Move buttons above TimerView
-                        showTimer.toggle()
-                    }
+                    
+                    startExerciseButton // Move buttons above TimerView
+                
                     Button("Done") {
                         history.addDoneExercise(Exercise.exercises[index].exerciseName)
                         timerDone = false
