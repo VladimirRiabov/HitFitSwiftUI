@@ -20,7 +20,7 @@ struct ContentView: View {
             }
         }
         //This makes it available to all views in the subview tree of TabView, including HistoryView.
-        .environmentObject(HistoryStore())
+        
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         
     }
