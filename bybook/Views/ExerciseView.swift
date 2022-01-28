@@ -9,88 +9,131 @@ import SwiftUI
 import AVKit
 
 struct ExerciseView: View {
-    @Binding var selectedTab: Int
-    let index: Int
-    @State private var timerDone = false
-    @State private var showTimer = false
-    var lastExercise: Bool {
-        index + 1 == Exercise.exercises.count
-    }
-    
-    @State private var showHistory = false
-    @State private var showSuccess = false
-    @EnvironmentObject var history: HistoryStore
-    
-    var startExerciseButton: some View {
-      RaisedButton(buttonText: "Start Exercise") {
-        showTimer.toggle()
+  @EnvironmentObject var history: HistoryStore
+  @Binding var selectedTab: Int
+  @State private var timerDone = false
+
+  @State private var showSuccess = false
+  @State private var showSheet = false
+  @State private var showHistory = false
+  @State private var showTimer = false
+
+  @State private var exerciseSheet: ExerciseSheet?
+
+  let index: Int
+
+  enum ExerciseSheet {
+    case history, timer, success
+  }
+
+  var lastExercise: Bool {
+    index + 1 == Exercise.exercises.count
+  }
+
+  var body: some View {
+    GeometryReader { geometry in
+      VStack {
+        HeaderView(
+          selectedTab: $selectedTab,
+          titleText: Exercise.exercises[index].exerciseName)
+          .padding(.bottom)
+        Spacer()
+        ContainerView {
+          VStack {
+            video(size: geometry.size)
+            startExerciseButton
+              .padding(20)
+            RatingView(exerciseIndex: index)
+              .padding()
+            Spacer()
+            historyButton
+          }
+        }
+        .frame(height: geometry.size.height * 0.8)
+        .sheet(isPresented: $showSheet, onDismiss: {
+          showSuccess = false
+          showHistory = false
+          if exerciseSheet == .timer {
+            if timerDone {
+            history.addDoneExercise(Exercise.exercises[index].exerciseName)
+              timerDone = false
+            }
+            showTimer = false
+            if lastExercise {
+              showSuccess = true
+              showSheet = true
+              exerciseSheet = .success
+            } else {
+              selectedTab += 1
+            }
+          } else {
+            exerciseSheet = nil
+          }
+          showTimer = false
+        }, content: {
+          if let exerciseSheet = exerciseSheet {
+            switch exerciseSheet {
+            case .history:
+              HistoryView(showHistory: $showHistory)
+                .environmentObject(history)
+            case .timer:
+              TimerView(
+                timerDone: $timerDone,
+                exerciseName: Exercise.exercises[index].exerciseName)
+            case .success:
+              SuccessView(selectedTab: $selectedTab)
+            }
+          }
+        })
       }
     }
-    
-    var body: some View {
-        
-        GeometryReader { geometry in
-            VStack {
-                HeaderView(
-                    selectedTab: $selectedTab,
-                    titleText: Exercise.exercises[index].exerciseName)
-                    .padding(.bottom)
-                
-                if let url = Bundle.main.url(
-                    forResource: Exercise.exercises[index].videoName,
-                    withExtension: "mp4") {
-                    VideoPlayer(player: AVPlayer(url: url))
-                        .frame(height: geometry.size.height * 0.45)
-                } else {
-                    Text("Couldn’t find \(Exercise.exercises[index].videoName).mp4")
-                        .foregroundColor(.red)
-                }
-                //                Text(Date().addingTimeInterval(interval), style: .timer)
-                //                 .font(.system(size: 90))
-                HStack(spacing: 150) {
-                    
-                    startExerciseButton // Move buttons above TimerView
-                
-                    Button("Done") {
-                        history.addDoneExercise(Exercise.exercises[index].exerciseName)
-                        timerDone = false
-                        showTimer.toggle()
-                        if lastExercise {
-                            showSuccess.toggle()
-                        } else {
-                            selectedTab += 1
-                        }
-                    }
-                    .disabled(!timerDone)
-                    .sheet(isPresented: $showSuccess) {
-                        SuccessView(selectedTab: $selectedTab)
-                    }
-                }
-                .font(.title3)
-                .padding()
-                if showTimer {
-                    TimerView(timerDone: $timerDone)
-                }
-                Spacer()
-                RatingView(exerciseIndex: index) // Move RatingView below Spacer
-                    .padding()
-                Button("History") {
-                    showHistory.toggle()
-                }
-                .sheet(isPresented: $showHistory) {
-                    HistoryView(showHistory: $showHistory)
-                }
-                .padding(.bottom)
-            }
-        }
+  }
+
+  @ViewBuilder
+  func video(size: CGSize) -> some View {
+    if let url = Bundle.main.url(
+      forResource: Exercise.exercises[index].videoName,
+        withExtension: "mp4") {
+      VideoPlayer(player: AVPlayer(url: url))
+        .frame(height: size.height * 0.25)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .padding(20)
+    } else {
+      Text(
+        "Couldn't find \(Exercise.exercises[index].videoName).mp4")
+        .foregroundColor(.red)
     }
+  }
+
+  var startExerciseButton: some View {
+    RaisedButton(buttonText: "Start Exercise") {
+      showTimer.toggle()
+      showSheet = true
+      exerciseSheet = .timer
+    }
+  }
+
+  var historyButton: some View {
+    Button(
+      action: {
+        showSheet = true
+        showHistory = true
+        exerciseSheet = .history
+      }, label: {
+        Text("History")
+          .fontWeight(.bold)
+          .padding([.leading, .trailing], 5)
+      })
+      .padding(.bottom, 10)
+      .buttonStyle(EmbossedButtonStyle())
+  }
 }
 
 struct ExerciseView_Previews: PreviewProvider {
-    static var previews: some View {
-        ExerciseView(selectedTab: .constant(0), index: 0)
-         .environmentObject(HistoryStore())
-    }
+  static var previews: some View {
+    ExerciseView(selectedTab: .constant(0), index: 0)
+      .environmentObject(HistoryStore())
+  }
 }
 
 
